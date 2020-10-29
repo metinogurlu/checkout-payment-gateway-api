@@ -10,8 +10,6 @@ namespace PaymentGatewayAPI.Entities
         public string CardNumber { get; set; }
         public string ExpirationMonth { get; set; }
         public string ExpirationYear { get; set; }
-        public decimal Amount { get; set; }
-        public string Currency { get; set; }
         public string CVV { get; set; }
     }
 }
