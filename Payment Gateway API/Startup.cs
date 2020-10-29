@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Payment_Gateway_API
+namespace PaymentGatewayAPI
 {
     public class Startup
     {
