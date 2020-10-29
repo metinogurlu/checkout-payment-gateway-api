@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using PaymentGatewayAPI.Validators;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace PaymentGatewayAPI.Entities
 {
@@ -18,6 +15,26 @@ namespace PaymentGatewayAPI.Entities
         public int ExpirationYear { get; set; }
 
         [JsonPropertyName("cvv")]
-        public string CVV { get; set; }
+        public string Cvv { get; set; }
+
+        private readonly ICreditCardValidator _validator;
+
+        public Card(ICreditCardValidator validator)
+        {
+            _validator = validator;
+        }
+
+        public ResponseCode Validate()
+        {
+            if (_validator.isValid(this))
+                return ResponseCodes.Approved;
+
+            if (!_validator.isCardNumberValid(CardNumber))
+                return ResponseCodes.SoftDecline.InvalidCardNumber;
+            else if (!_validator.isExpiryDateValid(ExpirationMonth, ExpirationYear))
+                return ResponseCodes.SoftDecline.InvalidCardNumber;
+            else
+                return ResponseCodes.RiskResponses.CvvMissingOrIncorrect;
+        }
     }
 }

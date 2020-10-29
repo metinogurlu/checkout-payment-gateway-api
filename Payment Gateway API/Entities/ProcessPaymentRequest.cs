@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace PaymentGatewayAPI.Entities
 {
-    public class PaymentRequest
+    public class ProcessPaymentRequest
     {
         public Guid Id { get; private set; }
 
@@ -18,7 +15,7 @@ namespace PaymentGatewayAPI.Entities
         [JsonPropertyName("currency")]
         public string Currency { get; set; }
 
-        public PaymentRequest()
+        public ProcessPaymentRequest()
         {
             Id = Guid.NewGuid();
         }

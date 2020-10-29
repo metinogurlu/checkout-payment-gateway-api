@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PaymentGatewayAPI.Entities;
 
@@ -25,7 +21,7 @@ namespace PaymentGatewayAPI.Controllers
         /// <param name="paymentsRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult ProcessPayment([FromBody] PaymentRequest paymentRequest)
+        public IActionResult ProcessPayment([FromBody] ProcessPaymentRequest paymentRequest)
         {
             return Ok(paymentRequest);
         }
