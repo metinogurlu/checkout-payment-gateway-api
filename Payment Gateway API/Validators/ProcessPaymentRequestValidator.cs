@@ -1,6 +1,5 @@
-﻿using PaymentGatewayAPI.Entities;
-using System;
-using System.Linq;
+﻿using System.Linq;
+using PaymentGatewayAPI.Entities;
 
 namespace PaymentGatewayAPI.Validators
 {
@@ -23,6 +22,13 @@ namespace PaymentGatewayAPI.Validators
           "MNT", "TND", "TRY", "AED", "UGX", "CLF", "USD", "UZS", "VUV", "KRW", "YER",
           "JPY", "CNY", "ZMW", "ZWL", "PLN" };
 
+        private readonly ICardValidator _cardValidator;
+
+        public ProcessPaymentRequestValidator(ICardValidator cardValidator)
+        {
+            _cardValidator = cardValidator;
+        }
+
         public bool isAmountValid(decimal amount) => amount > 0;
 
         public bool isCurrencyValid(string currencyCode)
@@ -30,11 +36,24 @@ namespace PaymentGatewayAPI.Validators
             return _currencies.Contains(currencyCode);
         }
 
-        public bool IsCardValid(Card card) => card.Validate() == ResponseCodes.Approved;
+        public bool IsCardValid(Card card) => ValidateCard(card) == ResponseCodes.Approved;
 
         public bool isValid(ProcessPaymentRequest processPaymentRequest) =>
             isAmountValid(processPaymentRequest.Amount)
             && isCurrencyValid(processPaymentRequest.Currency)
             && IsCardValid(processPaymentRequest.Card);
+
+        public ResponseCode ValidateCard(Card card)
+        {
+            if (_cardValidator.isValid(card))
+                return ResponseCodes.Approved;
+
+            if (!_cardValidator.isCardNumberValid(card.CardNumber))
+                return ResponseCodes.SoftDecline.InvalidCardNumber;
+            else if (!_cardValidator.isExpiryDateValid(card.ExpirationMonth, card.ExpirationYear))
+                return ResponseCodes.SoftDecline.InvalidCardNumber;
+            else
+                return ResponseCodes.RiskResponses.CvvMissingOrIncorrect;
+        }
     }
 }

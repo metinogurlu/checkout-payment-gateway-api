@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PaymentGatewayAPI.Entities;
+using PaymentGatewayAPI.Services;
 
 namespace PaymentGatewayAPI.Controllers
 {
@@ -9,10 +10,12 @@ namespace PaymentGatewayAPI.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly ILogger<PaymentsController> _logger;
+        private readonly IPaymentService _paymentService;
 
-        public PaymentsController(ILogger<PaymentsController> logger)
+        public PaymentsController(ILogger<PaymentsController> logger, IPaymentService paymentService)
         {
             _logger = logger;
+            _paymentService = paymentService;
         }
 
         /// <summary>
@@ -23,7 +26,7 @@ namespace PaymentGatewayAPI.Controllers
         [HttpPost]
         public IActionResult ProcessPayment([FromBody] ProcessPaymentRequest paymentRequest)
         {
-            return Ok(paymentRequest);
+            return new JsonResult(_paymentService.ProcessPayment(paymentRequest));
         }
     }
 }

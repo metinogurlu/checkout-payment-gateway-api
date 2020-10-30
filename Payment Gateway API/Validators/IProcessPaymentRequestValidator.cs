@@ -11,5 +11,7 @@ namespace PaymentGatewayAPI.Validators
         bool isAmountValid(decimal amount);
 
         bool isCurrencyValid(string currencyCode);
+
+        ResponseCode ValidateCard(Card card);
     }
 }

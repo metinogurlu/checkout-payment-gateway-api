@@ -2,7 +2,7 @@
 
 namespace PaymentGatewayAPI.Validators
 {
-    public interface ICreditCardValidator
+    public interface ICardValidator
     {
         bool isValid(Card card);
 

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace PaymentGatewayAPI.Validators
 {
-    public class CreditCardValidator : ICreditCardValidator
+    public class CardValidator : ICardValidator
     {
         public bool isValid(Card card)
             => isCardNumberValid(card.CardNumber) && isExpiryDateValid(card.ExpirationMonth, card.ExpirationYear) && isCvvValid(card.Cvv);
