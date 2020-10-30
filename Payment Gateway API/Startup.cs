@@ -41,6 +41,7 @@ namespace PaymentGatewayAPI
             services.AddTransient<ICardValidator, CardValidator>();
             services.AddTransient<IProcessPaymentRequestValidator, ProcessPaymentRequestValidator>();
             services.AddTransient<IPaymentService, PaymentServie>();
+            services.AddTransient<IAcquiringBankSimulator, AcquiringBankSimulator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

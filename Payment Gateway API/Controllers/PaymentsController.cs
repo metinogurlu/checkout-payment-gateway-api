@@ -11,6 +11,7 @@ namespace PaymentGatewayAPI.Controllers
     {
         private readonly ILogger<PaymentsController> _logger;
         private readonly IPaymentService _paymentService;
+        private readonly IAcquiringBankSimulator _acquiringBankService;
 
         public PaymentsController(ILogger<PaymentsController> logger, IPaymentService paymentService)
         {
@@ -26,7 +27,9 @@ namespace PaymentGatewayAPI.Controllers
         [HttpPost]
         public IActionResult ProcessPayment([FromBody] ProcessPaymentRequest paymentRequest)
         {
-            return new JsonResult(_paymentService.ProcessPayment(paymentRequest));
+            ProcessPaymentResponse processPaymentResponseMessage = _paymentService.ProcessPayment(paymentRequest);
+
+            return new JsonResult(processPaymentResponseMessage);
         }
     }
 }

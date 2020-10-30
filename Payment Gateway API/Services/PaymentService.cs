@@ -9,23 +9,33 @@ namespace PaymentGatewayAPI
         private readonly ICardValidator _cardValidator;
         private readonly IProcessPaymentRequestValidator _processPaymentRequestValidator;
 
-        public PaymentServie(IProcessPaymentRequestValidator processPaymentRequestValidator, ICardValidator cardValidator)
+        private readonly IAcquiringBankSimulator _acquiringBankService;
+
+        public PaymentServie(IProcessPaymentRequestValidator processPaymentRequestValidator, ICardValidator cardValidator, IAcquiringBankSimulator acquiringBankService)
         {
             _cardValidator = cardValidator;
+            _acquiringBankService = acquiringBankService;
             _processPaymentRequestValidator = processPaymentRequestValidator;
         }
 
-        public ResponseCode ProcessPayment(ProcessPaymentRequest processPaymentRequest)
+        public ProcessPaymentResponse ProcessPayment(ProcessPaymentRequest paymentRequest)
         {
-            return ValidatePaymentRequest(processPaymentRequest);
+            ResponseCode gatewayResponseCode = ValidatePaymentRequest(paymentRequest);
+
+            if (gatewayResponseCode == ResponseCodes.Approved)
+                gatewayResponseCode = _acquiringBankService.ProcessPayment(paymentRequest);
+
+            var processPaymentResponseMessage =
+                new ProcessPaymentResponse(paymentRequest.Id, paymentRequest.Amount, paymentRequest.Currency, gatewayResponseCode);
+
+            return processPaymentResponseMessage;
         }
 
         public ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest)
         {
             if (_processPaymentRequestValidator.isValid(processPaymentRequest))
                 return ResponseCodes.Approved;
-
-            if (!_processPaymentRequestValidator.IsCardValid(processPaymentRequest.Card))
+            else if (!_processPaymentRequestValidator.IsCardValid(processPaymentRequest.Card))
                 return _processPaymentRequestValidator.ValidateCard(processPaymentRequest.Card);
             else if (!_processPaymentRequestValidator.isAmountValid(processPaymentRequest.Amount))
                 return ResponseCodes.SoftDecline.InvalidAmount;
