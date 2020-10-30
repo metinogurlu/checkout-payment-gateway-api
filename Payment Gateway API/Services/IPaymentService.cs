@@ -4,7 +4,7 @@ namespace PaymentGatewayAPI.Services
 {
     public interface IPaymentService
     {
-        ResponseCode ProcessPayment(ProcessPaymentRequest processPaymentRequest);
+        ProcessPaymentResponse ProcessPayment(ProcessPaymentRequest paymentRequest);
 
         ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest);
     }
