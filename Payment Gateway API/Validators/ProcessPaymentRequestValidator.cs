@@ -51,7 +51,7 @@ namespace PaymentGatewayAPI.Validators
             if (!_cardValidator.isCardNumberValid(card.CardNumber))
                 return ResponseCodes.SoftDecline.InvalidCardNumber;
             else if (!_cardValidator.isExpiryDateValid(card.ExpirationMonth, card.ExpirationYear))
-                return ResponseCodes.SoftDecline.InvalidCardNumber;
+                return ResponseCodes.SoftDecline.BadTrackData;
             else
                 return ResponseCodes.RiskResponses.CvvMissingOrIncorrect;
         }

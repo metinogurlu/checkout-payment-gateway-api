@@ -11,6 +11,8 @@
             public static ResponseCode InvalidAmount => new ResponseCode(20013, "Invalid Value/Amount");
 
             public static ResponseCode UnsupportedCurrency => new ResponseCode(20106, "Unsupported currency");
+
+            public static ResponseCode BadTrackData => new ResponseCode(20087, "Bad Track Data (invalid CVV and/or expiry date)");
         }
 
         public static class HardDecline
