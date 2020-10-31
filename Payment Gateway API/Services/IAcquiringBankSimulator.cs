@@ -1,5 +1,4 @@
-﻿using PaymentGatewayAPI.Data;
-using PaymentGatewayAPI.Entities;
+﻿using PaymentGatewayAPI.Entities;
 
 namespace PaymentGatewayAPI.Services
 {

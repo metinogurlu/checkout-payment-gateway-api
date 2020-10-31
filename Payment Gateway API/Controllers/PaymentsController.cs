@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PaymentGatewayAPI.Data;
 using PaymentGatewayAPI.Entities;
 using PaymentGatewayAPI.Services;
+using System.Threading.Tasks;
 
 namespace PaymentGatewayAPI.Controllers
 {
@@ -23,11 +23,24 @@ namespace PaymentGatewayAPI.Controllers
         /// Makes a payment with given information
         /// </summary>
         /// <param name="paymentsRequest"></param>
-        /// <returns></returns>
+        /// <returns>Payment</returns>
         [HttpPost]
-        public IActionResult ProcessPayment([FromBody] ProcessPaymentRequest paymentRequest)
+        public async Task<IActionResult> ProcessPayment([FromBody] ProcessPaymentRequest paymentRequest)
         {
-            Payment payment = _paymentService.ProcessPayment(paymentRequest);
+            Payment payment = await _paymentService.ProcessPaymentAsync(paymentRequest);
+
+            return new JsonResult(payment);
+        }
+
+        /// <summary>
+        /// Gets the specific payment with given id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Payment</returns>
+        [HttpGet]
+        public async Task<IActionResult> GetPayment(string id)
+        {
+            Payment payment = await _paymentService.GetPaymentAsync(id);
 
             return new JsonResult(payment);
         }

@@ -10,7 +10,7 @@ namespace PaymentGatewayAPI.Services
         {
             return new Payment
             {
-                Identifier = Guid.NewGuid(),
+                ProcessId = Guid.NewGuid(),
                 CardNumber = GetMaskedCardNumber(paymentRequest.Card.CardNumber),
                 Amount = paymentRequest.Amount,
                 Currency = paymentRequest.Currency,

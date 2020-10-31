@@ -11,9 +11,9 @@ namespace PaymentGatewayAPI.Entities
         [Column("id")]
         public long Id { get; set; }
 
-        [Column("identifier")]
+        [Column("process_id")]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid? Identifier { get; set; }
+        public Guid? ProcessId { get; set; }
 
         [Column("card_number")]
         [JsonProperty("card_number")]

@@ -1,8 +1,11 @@
-﻿using PaymentGatewayAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PaymentGatewayAPI.Data;
 using PaymentGatewayAPI.Entities;
 using PaymentGatewayAPI.Services;
 using PaymentGatewayAPI.Validators;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PaymentGatewayAPI
 {
@@ -19,7 +22,7 @@ namespace PaymentGatewayAPI
             _paymentContext = paymentContext;
         }
 
-        public Payment ProcessPayment(ProcessPaymentRequest paymentRequest)
+        public async Task<Payment> ProcessPaymentAsync(ProcessPaymentRequest paymentRequest)
         {
             ResponseCode gatewayResponseCode = ValidatePaymentRequest(paymentRequest);
 
@@ -39,9 +42,21 @@ namespace PaymentGatewayAPI
             Payment processedPayment = _acquiringBankService.ProcessPayment(paymentRequest);
 
             _paymentContext.Payments.Add(processedPayment);
-            _paymentContext.SaveChanges();
+            await _paymentContext.SaveChangesAsync();
 
             return processedPayment;
+        }
+
+        /// <summary>
+        /// Gets the specific payment with given processId
+        /// </summary>
+        /// <param name="processId"></param>
+        /// <returns></returns>
+        public async Task<Payment> GetPaymentAsync(string processId)
+        {
+            return await _paymentContext.Payments.
+                Where(p => p.ProcessId == Guid.Parse(processId))
+                .FirstOrDefaultAsync();
         }
 
         public ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest)

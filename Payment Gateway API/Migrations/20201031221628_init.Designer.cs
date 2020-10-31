@@ -10,7 +10,7 @@ using PaymentGatewayAPI.Data;
 namespace PaymentGatewayAPI.Migrations
 {
     [DbContext(typeof(PaymentContext))]
-    [Migration("20201031215711_init")]
+    [Migration("20201031221628_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,8 +41,8 @@ namespace PaymentGatewayAPI.Migrations
                         .HasColumnName("currency")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("Identifier")
-                        .HasColumnName("identifier")
+                    b.Property<Guid?>("ProcessId")
+                        .HasColumnName("process_id")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ProcessedAt")
