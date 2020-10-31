@@ -5,8 +5,6 @@ namespace PaymentGatewayAPI.Entities
 {
     public class ProcessPaymentResponse
     {
-        public Guid Id { get; private set; }
-
         [JsonPropertyName("amount")]
         public decimal Amount { get; set; }
 
@@ -23,9 +21,8 @@ namespace PaymentGatewayAPI.Entities
         [JsonPropertyName("response_summary")]
         public string Summary { get; set; }
 
-        public ProcessPaymentResponse(Guid id, decimal amount, string currency, ResponseCode gatewayValidationResponseCode)
+        public ProcessPaymentResponse(decimal amount, string currency, ResponseCode gatewayValidationResponseCode)
         {
-            Id = id;
             Amount = amount;
             Currency = currency;
             Code = gatewayValidationResponseCode.Code;

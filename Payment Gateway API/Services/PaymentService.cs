@@ -22,13 +22,13 @@ namespace PaymentGatewayAPI
         {
             ResponseCode gatewayResponseCode = ValidatePaymentRequest(paymentRequest);
 
-            if (gatewayResponseCode == ResponseCodes.Approved)
-                gatewayResponseCode = _acquiringBankService.ProcessPayment(paymentRequest);
+            //if the request is not valid return back with response immediately
+            if (gatewayResponseCode != ResponseCodes.Approved)
+                return new ProcessPaymentResponse(paymentRequest.Amount, paymentRequest.Currency, gatewayResponseCode);
 
-            var processPaymentResponseMessage =
-                new ProcessPaymentResponse(paymentRequest.Id, paymentRequest.Amount, paymentRequest.Currency, gatewayResponseCode);
+            AcquiringBankResponse acquiringBankResponse = _acquiringBankService.ProcessPayment(paymentRequest);
 
-            return processPaymentResponseMessage;
+            return new ProcessPaymentResponse(paymentRequest.Amount, paymentRequest.Currency, acquiringBankResponse.ResponseCode);
         }
 
         public ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest)

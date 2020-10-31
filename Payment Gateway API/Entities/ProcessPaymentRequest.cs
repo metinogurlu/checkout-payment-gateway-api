@@ -5,8 +5,6 @@ namespace PaymentGatewayAPI.Entities
 {
     public class ProcessPaymentRequest
     {
-        public Guid Id { get; private set; }
-
         public Card Card { get; set; }
 
         [JsonPropertyName("amount")]
@@ -14,10 +12,5 @@ namespace PaymentGatewayAPI.Entities
 
         [JsonPropertyName("currency")]
         public string Currency { get; set; }
-
-        public ProcessPaymentRequest()
-        {
-            Id = Guid.NewGuid();
-        }
     }
 }

@@ -4,9 +4,9 @@ namespace PaymentGatewayAPI.Services
 {
     public class AcquiringBankSimulator : IAcquiringBankSimulator
     {
-        public ResponseCode ProcessPayment(ProcessPaymentRequest paymentRequest)
+        public AcquiringBankResponse ProcessPayment(ProcessPaymentRequest paymentRequest)
         {
-            return ResponseCodes.Approved;
+            return new AcquiringBankResponse(paymentRequest, ResponseCodes.Approved);
         }
     }
 }

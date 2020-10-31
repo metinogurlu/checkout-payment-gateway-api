@@ -4,6 +4,6 @@ namespace PaymentGatewayAPI.Services
 {
     public interface IAcquiringBankSimulator
     {
-        public ResponseCode ProcessPayment(ProcessPaymentRequest paymentRequest);
+        public AcquiringBankResponse ProcessPayment(ProcessPaymentRequest paymentRequest);
     }
 }
