@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using PaymentGatewayAPI.Data;
 using PaymentGatewayAPI.Services;
 using PaymentGatewayAPI.Validators;
 using System;
@@ -38,10 +40,15 @@ namespace PaymentGatewayAPI
                     }
                 });
             });
+
+            services.AddDbContext<PaymentContext>(options =>
+                options.UseNpgsql(Configuration["ConnectionString"]));
+
             services.AddTransient<ICardValidator, CardValidator>();
             services.AddTransient<IProcessPaymentRequestValidator, ProcessPaymentRequestValidator>();
             services.AddTransient<IPaymentService, PaymentServie>();
             services.AddTransient<IAcquiringBankSimulator, AcquiringBankSimulator>();
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +57,12 @@ namespace PaymentGatewayAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<PaymentContext>();
+                context.Database.Migrate();
             }
 
             app.UseSwagger();

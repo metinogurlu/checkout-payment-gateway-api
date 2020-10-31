@@ -1,24 +1,23 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace PaymentGatewayAPI.Entities
 {
     public class ProcessPaymentResponse
     {
-        [JsonPropertyName("amount")]
+        [JsonProperty("amount")]
         public decimal Amount { get; set; }
 
-        [JsonPropertyName("currency")]
+        [JsonProperty("currency")]
         public string Currency { get; set; }
 
         public bool Approved { get; private set; }
 
         public string Status { get; private set; }
 
-        [JsonPropertyName("response_code")]
+        [JsonProperty("response_code")]
         public int Code { get; set; }
 
-        [JsonPropertyName("response_summary")]
+        [JsonProperty("response_summary")]
         public string Summary { get; set; }
 
         public ProcessPaymentResponse(decimal amount, string currency, ResponseCode gatewayValidationResponseCode)
@@ -27,7 +26,7 @@ namespace PaymentGatewayAPI.Entities
             Currency = currency;
             Code = gatewayValidationResponseCode.Code;
             Summary = gatewayValidationResponseCode.Message;
-            Approved = gatewayValidationResponseCode == ResponseCodes.Approved;
+            Approved = gatewayValidationResponseCode.Equals(ResponseCodes.Approved);
             Status = Approved ? "Successful" : "Unsuccessful";
         }
     }

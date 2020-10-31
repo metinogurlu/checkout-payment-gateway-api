@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PaymentGatewayAPI.Data;
 using PaymentGatewayAPI.Entities;
 using PaymentGatewayAPI.Services;
 
@@ -11,7 +12,6 @@ namespace PaymentGatewayAPI.Controllers
     {
         private readonly ILogger<PaymentsController> _logger;
         private readonly IPaymentService _paymentService;
-        private readonly IAcquiringBankSimulator _acquiringBankService;
 
         public PaymentsController(ILogger<PaymentsController> logger, IPaymentService paymentService)
         {
@@ -27,9 +27,9 @@ namespace PaymentGatewayAPI.Controllers
         [HttpPost]
         public IActionResult ProcessPayment([FromBody] ProcessPaymentRequest paymentRequest)
         {
-            ProcessPaymentResponse processPaymentResponseMessage = _paymentService.ProcessPayment(paymentRequest);
+            Payment payment = _paymentService.ProcessPayment(paymentRequest);
 
-            return new JsonResult(processPaymentResponseMessage);
+            return new JsonResult(payment);
         }
     }
 }

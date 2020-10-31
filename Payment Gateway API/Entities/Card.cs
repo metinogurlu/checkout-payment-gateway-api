@@ -1,19 +1,19 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace PaymentGatewayAPI.Entities
 {
     public class Card
     {
-        [JsonPropertyName("card_number")]
+        [JsonProperty("card_number")]
         public string CardNumber { get; set; }
 
-        [JsonPropertyName("expiry_month")]
+        [JsonProperty("expiry_month")]
         public int ExpirationMonth { get; set; }
 
-        [JsonPropertyName("expiry_year")]
+        [JsonProperty("expiry_year")]
         public int ExpirationYear { get; set; }
 
-        [JsonPropertyName("cvv")]
+        [JsonProperty("cvv")]
         public string Cvv { get; set; }
     }
 }

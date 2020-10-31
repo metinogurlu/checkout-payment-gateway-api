@@ -1,34 +1,47 @@
-﻿using PaymentGatewayAPI.Entities;
+﻿using PaymentGatewayAPI.Data;
+using PaymentGatewayAPI.Entities;
 using PaymentGatewayAPI.Services;
 using PaymentGatewayAPI.Validators;
+using System;
 
 namespace PaymentGatewayAPI
 {
     public class PaymentServie : IPaymentService
     {
-        private readonly ICardValidator _cardValidator;
         private readonly IProcessPaymentRequestValidator _processPaymentRequestValidator;
-
         private readonly IAcquiringBankSimulator _acquiringBankService;
+        private readonly PaymentContext _paymentContext;
 
-        public PaymentServie(IProcessPaymentRequestValidator processPaymentRequestValidator, ICardValidator cardValidator, IAcquiringBankSimulator acquiringBankService)
+        public PaymentServie(IProcessPaymentRequestValidator processPaymentRequestValidator, IAcquiringBankSimulator acquiringBankService, PaymentContext paymentContext)
         {
-            _cardValidator = cardValidator;
             _acquiringBankService = acquiringBankService;
             _processPaymentRequestValidator = processPaymentRequestValidator;
+            _paymentContext = paymentContext;
         }
 
-        public ProcessPaymentResponse ProcessPayment(ProcessPaymentRequest paymentRequest)
+        public Payment ProcessPayment(ProcessPaymentRequest paymentRequest)
         {
             ResponseCode gatewayResponseCode = ValidatePaymentRequest(paymentRequest);
 
             //if the request is not valid return back with response immediately
-            if (gatewayResponseCode != ResponseCodes.Approved)
-                return new ProcessPaymentResponse(paymentRequest.Amount, paymentRequest.Currency, gatewayResponseCode);
+            if (!gatewayResponseCode.Equals(ResponseCodes.Approved))
+                return new Payment
+                {
+                    Amount = paymentRequest.Amount,
+                    Currency = paymentRequest.Currency,
+                    CardNumber = paymentRequest.Card.CardNumber,
+                    ResponseCode = gatewayResponseCode.Code,
+                    ResponseSummary = gatewayResponseCode.Message,
+                    Status = "Unsuccessful",
+                    ProcessedAt = DateTime.Now
+                };
 
-            AcquiringBankResponse acquiringBankResponse = _acquiringBankService.ProcessPayment(paymentRequest);
+            Payment processedPayment = _acquiringBankService.ProcessPayment(paymentRequest);
 
-            return new ProcessPaymentResponse(paymentRequest.Amount, paymentRequest.Currency, acquiringBankResponse.ResponseCode);
+            _paymentContext.Payments.Add(processedPayment);
+            _paymentContext.SaveChanges();
+
+            return processedPayment;
         }
 
         public ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest)

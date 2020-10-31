@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace PaymentGatewayAPI.Entities
 {
@@ -7,10 +6,10 @@ namespace PaymentGatewayAPI.Entities
     {
         public Card Card { get; set; }
 
-        [JsonPropertyName("amount")]
+        [JsonProperty("amount")]
         public decimal Amount { get; set; }
 
-        [JsonPropertyName("currency")]
+        [JsonProperty("currency")]
         public string Currency { get; set; }
     }
 }

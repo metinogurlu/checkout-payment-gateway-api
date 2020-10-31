@@ -1,10 +1,11 @@
-﻿using PaymentGatewayAPI.Entities;
+﻿using PaymentGatewayAPI.Data;
+using PaymentGatewayAPI.Entities;
 
 namespace PaymentGatewayAPI.Services
 {
     public interface IPaymentService
     {
-        ProcessPaymentResponse ProcessPayment(ProcessPaymentRequest paymentRequest);
+        Payment ProcessPayment(ProcessPaymentRequest paymentRequest);
 
         ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest);
     }
