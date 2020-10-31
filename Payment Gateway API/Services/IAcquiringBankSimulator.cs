@@ -1,9 +1,10 @@
-﻿using PaymentGatewayAPI.Entities;
+﻿using PaymentGatewayAPI.Data;
+using PaymentGatewayAPI.Entities;
 
 namespace PaymentGatewayAPI.Services
 {
     public interface IAcquiringBankSimulator
     {
-        public ResponseCode ProcessPayment(ProcessPaymentRequest paymentRequest);
+        public Payment ProcessPayment(ProcessPaymentRequest paymentRequest);
     }
 }

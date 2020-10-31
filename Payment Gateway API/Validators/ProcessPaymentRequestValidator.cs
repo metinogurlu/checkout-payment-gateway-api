@@ -36,7 +36,7 @@ namespace PaymentGatewayAPI.Validators
             return _currencies.Contains(currencyCode);
         }
 
-        public bool IsCardValid(Card card) => ValidateCard(card) == ResponseCodes.Approved;
+        public bool IsCardValid(Card card) => ResponseCodes.Approved.Equals(ValidateCard(card));
 
         public bool isValid(ProcessPaymentRequest processPaymentRequest) =>
             isAmountValid(processPaymentRequest.Amount)

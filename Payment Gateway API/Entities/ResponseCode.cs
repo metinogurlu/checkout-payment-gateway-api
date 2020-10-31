@@ -1,6 +1,8 @@
-﻿namespace PaymentGatewayAPI.Entities
+﻿using System;
+
+namespace PaymentGatewayAPI.Entities
 {
-    public class ResponseCode
+    public sealed class ResponseCode : IEquatable<ResponseCode>
     {
         public int Code { get; set; }
         public string Message { get; set; }
@@ -11,19 +13,11 @@
             Message = message;
         }
 
-        public override bool Equals(object obj)
+        public bool Equals(ResponseCode other)
         {
-            return (obj is ResponseCode) && (obj as ResponseCode).Code.Equals(Code);
-        }
-
-        public static bool operator ==(ResponseCode v1, ResponseCode v2)
-        {
-            return v1.Code.Equals(v2.Code);
-        }
-
-        public static bool operator !=(ResponseCode v1, ResponseCode v2)
-        {
-            return !v1.Code.Equals(v2.Code);
+            return !(other is null) &&
+                   Code == other.Code &&
+                   Message == other.Message;
         }
     }
 }

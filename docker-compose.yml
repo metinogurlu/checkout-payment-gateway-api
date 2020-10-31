@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  paymentdb:
+    container_name: paymentdb_container
+    image: postgres:latest
+    restart: always    
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: djxsjwxK2w!yKT
+    volumes:
+      - paymentdb-data:/var/lib/postgresql/data
+    networks:
+      - paymentgatewayapi
+
+  paymentgatewayapi:
+    container_name: paymentgatewayapi_container
+    image: ${DOCKER_REGISTRY-}paymentgatewayapi
+    restart: always
+    build:
+      context: .
+      dockerfile: Payment Gateway API/Dockerfile
+    environment:
+      - ConnectionString=Server=paymentdb;Database=paymentgateway;Username=postgres;Password=djxsjwxK2w!yKT  
+    networks:
+      - paymentgatewayapi
+
+
+volumes:
+  paymentdb-data:
+   name: "paymentdb-data"
+
+networks:
+  paymentgatewayapi:
+      name: exagatepaymentgatewayapi

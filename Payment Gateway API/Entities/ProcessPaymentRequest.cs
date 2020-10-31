@@ -1,23 +1,15 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace PaymentGatewayAPI.Entities
 {
     public class ProcessPaymentRequest
     {
-        public Guid Id { get; private set; }
-
         public Card Card { get; set; }
 
-        [JsonPropertyName("amount")]
+        [JsonProperty("amount")]
         public decimal Amount { get; set; }
 
-        [JsonPropertyName("currency")]
+        [JsonProperty("currency")]
         public string Currency { get; set; }
-
-        public ProcessPaymentRequest()
-        {
-            Id = Guid.NewGuid();
-        }
     }
 }
