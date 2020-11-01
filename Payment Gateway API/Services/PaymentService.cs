@@ -5,7 +5,6 @@ using PaymentGatewayAPI.Entities;
 using PaymentGatewayAPI.Services;
 using PaymentGatewayAPI.Validators;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PaymentGatewayAPI
@@ -95,11 +94,18 @@ namespace PaymentGatewayAPI
         /// </summary>
         /// <param name="processId"></param>
         /// <returns></returns>
-        public async Task<Payment> GetPaymentAsync(string processId)
+        public Task<Payment> GetPaymentAsync(string processId)
+        {
+            if (!Guid.TryParse(processId, out Guid processGuid))
+                throw new ArgumentException("Given processId is not valid for this GetPayment request", nameof(processId));
+
+            return GetPaymentByValidIdAsync(processId);
+        }
+
+        private async Task<Payment> GetPaymentByValidIdAsync(string processId)
         {
             return await _paymentContext.Payments.
-                Where(p => p.ProcessId == Guid.Parse(processId))
-                .FirstOrDefaultAsync();
+                FirstOrDefaultAsync(p => p.ProcessId == Guid.Parse(processId));
         }
 
         /// <summary>
@@ -107,7 +113,7 @@ namespace PaymentGatewayAPI
         /// </summary>
         /// <param name="processPaymentRequest"></param>
         /// <returns></returns>
-        public ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest)
+        private ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest)
         {
             if (_processPaymentRequestValidator.isValid(processPaymentRequest))
                 return ResponseCodes.Approved;

@@ -53,12 +53,16 @@ namespace PaymentGatewayAPI.Controllers
             try
             {
                 Payment payment = await _paymentService.GetPaymentAsync(id);
+
+                if (payment == default)
+                    return NotFound();
+
                 return new JsonResult(payment);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Payment could not retrieved!", id);
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                throw;
             }
         }
     }

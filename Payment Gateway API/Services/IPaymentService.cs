@@ -8,7 +8,5 @@ namespace PaymentGatewayAPI.Services
         Task<Payment> ProcessPaymentAsync(ProcessPaymentRequest paymentRequest);
 
         Task<Payment> GetPaymentAsync(string processId);
-
-        ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest);
     }
 }
