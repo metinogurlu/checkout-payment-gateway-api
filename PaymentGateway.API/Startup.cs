@@ -25,6 +25,9 @@ namespace PaymentGateway.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            #region Swagger Configurations
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -42,15 +45,25 @@ namespace PaymentGateway.API
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
+            services.AddControllers().AddNewtonsoftJson();
+
+            #endregion Swagger Configurations
+
+            #region DbContext Configuration
 
             services.AddDbContext<PaymentContext>(options =>
                 options.UseNpgsql(Configuration["ConnectionString"]));
+
+            #endregion DbContext Configuration
+
+            #region Register Other Services
 
             services.AddTransient<ICardValidator, CardValidator>();
             services.AddTransient<IProcessPaymentRequestValidator, ProcessPaymentRequestValidator>();
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<IAcquiringBankSimulator, AcquiringBankSimulator>();
-            services.AddControllers().AddNewtonsoftJson();
+
+            #endregion Register Other Services
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
