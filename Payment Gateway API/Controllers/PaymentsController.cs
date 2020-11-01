@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using PaymentGatewayAPI.Entities;
 using PaymentGatewayAPI.Services;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace PaymentGatewayAPI.Controllers
 {
@@ -27,9 +29,17 @@ namespace PaymentGatewayAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> ProcessPayment([FromBody] ProcessPaymentRequest paymentRequest)
         {
-            Payment payment = await _paymentService.ProcessPaymentAsync(paymentRequest);
+            try
+            {
+                Payment payment = await _paymentService.ProcessPaymentAsync(paymentRequest);
 
-            return new JsonResult(payment);
+                return new JsonResult(payment);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Payment could not processed!");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -40,9 +50,16 @@ namespace PaymentGatewayAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPayment(string id)
         {
-            Payment payment = await _paymentService.GetPaymentAsync(id);
-
-            return new JsonResult(payment);
+            try
+            {
+                Payment payment = await _paymentService.GetPaymentAsync(id);
+                return new JsonResult(payment);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Payment could not retrieved!", id);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }
