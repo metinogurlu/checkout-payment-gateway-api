@@ -4,13 +4,13 @@ namespace PaymentGateway.API.Validators
 {
     public interface IProcessPaymentRequestValidator
     {
-        bool isValid(ProcessPaymentRequest processPaymentRequest);
+        bool IsValid(ProcessPaymentRequest processPaymentRequest);
 
         bool IsCardValid(Card card);
 
-        bool isAmountValid(decimal amount);
+        bool IsAmountValid(decimal amount);
 
-        bool isCurrencyValid(string currencyCode);
+        bool IsCurrencyValid(string currencyCode);
 
         ResponseCode ValidateCard(Card card);
     }

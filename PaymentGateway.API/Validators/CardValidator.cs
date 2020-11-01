@@ -10,10 +10,10 @@ namespace PaymentGateway.API.Validators
     {
         private readonly ILogger<CardValidator> _logger;
 
-        public bool isValid(Card card)
-            => isCardNumberValid(card.CardNumber) && isExpiryDateValid(card.ExpirationMonth, card.ExpirationYear) && isCvvValid(card.Cvv);
+        public bool IsValid(Card card)
+            => IsCardNumberValid(card.CardNumber) && IsExpiryDateValid(card.ExpirationMonth, card.ExpirationYear) && IsCvvValid(card.Cvv);
 
-        public bool isCardNumberValid(string cardNumber)
+        public bool IsCardNumberValid(string cardNumber)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace PaymentGateway.API.Validators
             }
         }
 
-        public bool isCvvValid(string cvv)
+        public bool IsCvvValid(string cvv)
             => new Regex(@"^\d{3}$").IsMatch(cvv);
 
         public CardValidator(ILogger<CardValidator> logger)
@@ -34,7 +34,7 @@ namespace PaymentGateway.API.Validators
             _logger = logger;
         }
 
-        public bool isExpiryDateValid(int month, int year)
+        public bool IsExpiryDateValid(int month, int year)
         {
             try
             {

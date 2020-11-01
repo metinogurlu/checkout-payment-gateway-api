@@ -10,12 +10,12 @@ namespace PaymentGateway.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PaymentsController : ControllerBase
+    public class PaymentController : ControllerBase
     {
-        private readonly ILogger<PaymentsController> _logger;
+        private readonly ILogger<PaymentController> _logger;
         private readonly IPaymentService _paymentService;
 
-        public PaymentsController(ILogger<PaymentsController> logger, IPaymentService paymentService)
+        public PaymentController(ILogger<PaymentController> logger, IPaymentService paymentService)
         {
             _logger = logger;
             _paymentService = paymentService;

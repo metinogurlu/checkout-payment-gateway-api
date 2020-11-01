@@ -2,21 +2,21 @@
 using Microsoft.Extensions.Logging;
 using PaymentGateway.API.Data;
 using PaymentGateway.API.Entities;
-using PaymentGateway.API.Services;
+using PaymentGateway.API.Helpers;
 using PaymentGateway.API.Validators;
 using System;
 using System.Threading.Tasks;
 
-namespace PaymentGateway.API
+namespace PaymentGateway.API.Services
 {
-    public class PaymentServie : IPaymentService
+    public class PaymentService : IPaymentService
     {
         private readonly IProcessPaymentRequestValidator _processPaymentRequestValidator;
         private readonly IAcquiringBankSimulator _acquiringBankService;
         private readonly PaymentContext _paymentContext;
-        private readonly ILogger<PaymentServie> _logger;
+        private readonly ILogger<PaymentService> _logger;
 
-        public PaymentServie(ILogger<PaymentServie> logger,
+        public PaymentService(ILogger<PaymentService> logger,
             IProcessPaymentRequestValidator processPaymentRequestValidator,
             IAcquiringBankSimulator acquiringBankService,
             PaymentContext paymentContext)
@@ -49,7 +49,7 @@ namespace PaymentGateway.API
             {
                 Amount = paymentRequest.Amount,
                 Currency = paymentRequest.Currency,
-                CardNumber = paymentRequest.Card.CardNumber,
+                CardNumber = CardHelper.GetMaskedCardNumber(paymentRequest.Card.CardNumber),
                 ResponseCode = gatewayResponseCode.Code,
                 ResponseSummary = gatewayResponseCode.Message,
                 Status = "Unsuccessful",
@@ -96,7 +96,7 @@ namespace PaymentGateway.API
         /// <returns></returns>
         public Task<Payment> GetPaymentAsync(string processId)
         {
-            if (!Guid.TryParse(processId, out Guid processGuid))
+            if (!Guid.TryParse(processId, out _))
                 throw new ArgumentException("Given processId is not valid for this GetPayment request", nameof(processId));
 
             return GetPaymentByValidIdAsync(processId);
@@ -115,11 +115,11 @@ namespace PaymentGateway.API
         /// <returns></returns>
         private ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest)
         {
-            if (_processPaymentRequestValidator.isValid(processPaymentRequest))
+            if (_processPaymentRequestValidator.IsValid(processPaymentRequest))
                 return ResponseCodes.Approved;
             else if (!_processPaymentRequestValidator.IsCardValid(processPaymentRequest.Card))
                 return _processPaymentRequestValidator.ValidateCard(processPaymentRequest.Card);
-            else if (!_processPaymentRequestValidator.isAmountValid(processPaymentRequest.Amount))
+            else if (!_processPaymentRequestValidator.IsAmountValid(processPaymentRequest.Amount))
                 return ResponseCodes.SoftDecline.InvalidAmount;
             else
                 return ResponseCodes.SoftDecline.UnsupportedCurrency;

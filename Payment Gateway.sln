@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentGateway.API", "Payme
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{61AE860F-362F-4005-A4C2-3A582EAB0379}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentGateway.Test", "PaymentGateway.Test\PaymentGateway.Test.csproj", "{5FEF8303-781B-4AD2-8D42-7D662602CEB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{61AE860F-362F-4005-A4C2-3A582EAB0379}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61AE860F-362F-4005-A4C2-3A582EAB0379}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61AE860F-362F-4005-A4C2-3A582EAB0379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FEF8303-781B-4AD2-8D42-7D662602CEB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FEF8303-781B-4AD2-8D42-7D662602CEB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FEF8303-781B-4AD2-8D42-7D662602CEB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FEF8303-781B-4AD2-8D42-7D662602CEB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

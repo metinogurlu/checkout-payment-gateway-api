@@ -41,12 +41,14 @@ namespace PaymentGateway.API
                 });
             });
 
+            services.AddSwaggerGenNewtonsoftSupport();
+
             services.AddDbContext<PaymentContext>(options =>
                 options.UseNpgsql(Configuration["ConnectionString"]));
 
             services.AddTransient<ICardValidator, CardValidator>();
             services.AddTransient<IProcessPaymentRequestValidator, ProcessPaymentRequestValidator>();
-            services.AddTransient<IPaymentService, PaymentServie>();
+            services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<IAcquiringBankSimulator, AcquiringBankSimulator>();
             services.AddControllers().AddNewtonsoftJson();
         }

@@ -29,28 +29,28 @@ namespace PaymentGateway.API.Validators
             _cardValidator = cardValidator;
         }
 
-        public bool isAmountValid(decimal amount) => amount > 0;
+        public bool IsAmountValid(decimal amount) => amount > 0;
 
-        public bool isCurrencyValid(string currencyCode)
+        public bool IsCurrencyValid(string currencyCode)
         {
             return _currencies.Contains(currencyCode);
         }
 
         public bool IsCardValid(Card card) => ResponseCodes.Approved.Equals(ValidateCard(card));
 
-        public bool isValid(ProcessPaymentRequest processPaymentRequest) =>
-            isAmountValid(processPaymentRequest.Amount)
-            && isCurrencyValid(processPaymentRequest.Currency)
+        public bool IsValid(ProcessPaymentRequest processPaymentRequest) =>
+            IsAmountValid(processPaymentRequest.Amount)
+            && IsCurrencyValid(processPaymentRequest.Currency)
             && IsCardValid(processPaymentRequest.Card);
 
         public ResponseCode ValidateCard(Card card)
         {
-            if (_cardValidator.isValid(card))
+            if (_cardValidator.IsValid(card))
                 return ResponseCodes.Approved;
 
-            if (!_cardValidator.isCardNumberValid(card.CardNumber))
+            if (!_cardValidator.IsCardNumberValid(card.CardNumber))
                 return ResponseCodes.SoftDecline.InvalidCardNumber;
-            else if (!_cardValidator.isExpiryDateValid(card.ExpirationMonth, card.ExpirationYear))
+            else if (!_cardValidator.IsExpiryDateValid(card.ExpirationMonth, card.ExpirationYear))
                 return ResponseCodes.SoftDecline.BadTrackData;
             else
                 return ResponseCodes.RiskResponses.CvvMissingOrIncorrect;

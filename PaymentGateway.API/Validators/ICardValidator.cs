@@ -4,12 +4,12 @@ namespace PaymentGateway.API.Validators
 {
     public interface ICardValidator
     {
-        bool isValid(Card card);
+        bool IsValid(Card card);
 
-        bool isCardNumberValid(string cardNumber);
+        bool IsCardNumberValid(string cardNumber);
 
-        bool isExpiryDateValid(int month, int year);
+        bool IsExpiryDateValid(int month, int year);
 
-        bool isCvvValid(string cvv);
+        bool IsCvvValid(string cvv);
     }
 }
