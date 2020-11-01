@@ -1,11 +1,13 @@
-﻿using PaymentGatewayAPI.Data;
-using PaymentGatewayAPI.Entities;
+﻿using PaymentGatewayAPI.Entities;
+using System.Threading.Tasks;
 
 namespace PaymentGatewayAPI.Services
 {
     public interface IPaymentService
     {
-        Payment ProcessPayment(ProcessPaymentRequest paymentRequest);
+        Task<Payment> ProcessPaymentAsync(ProcessPaymentRequest paymentRequest);
+
+        Task<Payment> GetPaymentAsync(string processId);
 
         ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest);
     }

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using PaymentGatewayAPI.Data;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using PaymentGatewayAPI.Entities;
 using PaymentGatewayAPI.Services;
+using Microsoft.Extensions.Logging;
 
 namespace PaymentGatewayAPI.Controllers
 {
@@ -23,13 +25,41 @@ namespace PaymentGatewayAPI.Controllers
         /// Makes a payment with given information
         /// </summary>
         /// <param name="paymentsRequest"></param>
-        /// <returns></returns>
+        /// <returns>Payment</returns>
         [HttpPost]
-        public IActionResult ProcessPayment([FromBody] ProcessPaymentRequest paymentRequest)
+        public async Task<IActionResult> ProcessPayment([FromBody] ProcessPaymentRequest paymentRequest)
         {
-            Payment payment = _paymentService.ProcessPayment(paymentRequest);
+            try
+            {
+                Payment payment = await _paymentService.ProcessPaymentAsync(paymentRequest);
 
-            return new JsonResult(payment);
+                return new JsonResult(payment);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Payment could not processed!");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Gets the specific payment with given id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Payment</returns>
+        [HttpGet]
+        public async Task<IActionResult> GetPayment(string id)
+        {
+            try
+            {
+                Payment payment = await _paymentService.GetPaymentAsync(id);
+                return new JsonResult(payment);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Payment could not retrieved!", id);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

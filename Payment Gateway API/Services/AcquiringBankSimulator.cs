@@ -6,11 +6,16 @@ namespace PaymentGatewayAPI.Services
 {
     public class AcquiringBankSimulator : IAcquiringBankSimulator
     {
+        /// <summary>
+        /// Simulate bank's payment process behavior
+        /// </summary>
+        /// <param name="paymentRequest"></param>
+        /// <returns></returns>
         public Payment ProcessPayment(ProcessPaymentRequest paymentRequest)
         {
             return new Payment
             {
-                Identifier = Guid.NewGuid(),
+                ProcessId = Guid.NewGuid(),
                 CardNumber = GetMaskedCardNumber(paymentRequest.Card.CardNumber),
                 Amount = paymentRequest.Amount,
                 Currency = paymentRequest.Currency,
@@ -21,6 +26,11 @@ namespace PaymentGatewayAPI.Services
             };
         }
 
+        /// <summary>
+        /// Hide card number except last four character
+        /// </summary>
+        /// <param name="cardNumber"></param>
+        /// <returns></returns>
         private string GetMaskedCardNumber(string cardNumber)
         {
             string firstPartOfCardNumber = cardNumber[0..^4];

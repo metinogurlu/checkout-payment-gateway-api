@@ -15,10 +15,6 @@
             public static ResponseCode BadTrackData => new ResponseCode(20087, "Bad Track Data (invalid CVV and/or expiry date)");
         }
 
-        public static class HardDecline
-        {
-        }
-
         public static class RiskResponses
         {
             public static ResponseCode CvvMissingOrIncorrect => new ResponseCode(40104, "CVV is missing or incorrect");

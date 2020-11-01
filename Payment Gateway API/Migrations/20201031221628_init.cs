@@ -14,7 +14,7 @@ namespace PaymentGatewayAPI.Migrations
                 {
                     id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    identifier = table.Column<Guid>(nullable: true),
+                    process_id = table.Column<Guid>(nullable: true),
                     card_number = table.Column<string>(nullable: true),
                     amount = table.Column<decimal>(nullable: false),
                     currency = table.Column<string>(nullable: true),

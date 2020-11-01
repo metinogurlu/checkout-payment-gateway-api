@@ -39,8 +39,8 @@ namespace PaymentGatewayAPI.Migrations
                         .HasColumnName("currency")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("Identifier")
-                        .HasColumnName("identifier")
+                    b.Property<Guid?>("ProcessId")
+                        .HasColumnName("process_id")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ProcessedAt")

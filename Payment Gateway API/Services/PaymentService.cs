@@ -1,8 +1,12 @@
-﻿using PaymentGatewayAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using PaymentGatewayAPI.Data;
 using PaymentGatewayAPI.Entities;
 using PaymentGatewayAPI.Services;
 using PaymentGatewayAPI.Validators;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PaymentGatewayAPI
 {
@@ -11,39 +15,98 @@ namespace PaymentGatewayAPI
         private readonly IProcessPaymentRequestValidator _processPaymentRequestValidator;
         private readonly IAcquiringBankSimulator _acquiringBankService;
         private readonly PaymentContext _paymentContext;
+        private readonly ILogger<PaymentServie> _logger;
 
-        public PaymentServie(IProcessPaymentRequestValidator processPaymentRequestValidator, IAcquiringBankSimulator acquiringBankService, PaymentContext paymentContext)
+        public PaymentServie(ILogger<PaymentServie> logger,
+            IProcessPaymentRequestValidator processPaymentRequestValidator,
+            IAcquiringBankSimulator acquiringBankService,
+            PaymentContext paymentContext)
         {
             _acquiringBankService = acquiringBankService;
             _processPaymentRequestValidator = processPaymentRequestValidator;
             _paymentContext = paymentContext;
+            _logger = logger;
         }
 
-        public Payment ProcessPayment(ProcessPaymentRequest paymentRequest)
+        /// <summary>
+        /// Process payment request and send it to bank if it is valid request
+        /// </summary>
+        /// <param name="paymentRequest"></param>
+        /// <returns></returns>
+        public async Task<Payment> ProcessPaymentAsync(ProcessPaymentRequest paymentRequest)
         {
             ResponseCode gatewayResponseCode = ValidatePaymentRequest(paymentRequest);
 
             //if the request is not valid return back with response immediately
-            if (!gatewayResponseCode.Equals(ResponseCodes.Approved))
-                return new Payment
-                {
-                    Amount = paymentRequest.Amount,
-                    Currency = paymentRequest.Currency,
-                    CardNumber = paymentRequest.Card.CardNumber,
-                    ResponseCode = gatewayResponseCode.Code,
-                    ResponseSummary = gatewayResponseCode.Message,
-                    Status = "Unsuccessful",
-                    ProcessedAt = DateTime.Now
-                };
-
-            Payment processedPayment = _acquiringBankService.ProcessPayment(paymentRequest);
-
-            _paymentContext.Payments.Add(processedPayment);
-            _paymentContext.SaveChanges();
-
-            return processedPayment;
+            if (gatewayResponseCode.Equals(ResponseCodes.Approved))
+                return await ProcessValidPaymentRequest(paymentRequest);
+            else
+                return ProcessInvalidPaymentRequest(paymentRequest, gatewayResponseCode);
         }
 
+        private Payment ProcessInvalidPaymentRequest(ProcessPaymentRequest paymentRequest, ResponseCode gatewayResponseCode)
+        {
+            var unsuccessfulPayment = new Payment
+            {
+                Amount = paymentRequest.Amount,
+                Currency = paymentRequest.Currency,
+                CardNumber = paymentRequest.Card.CardNumber,
+                ResponseCode = gatewayResponseCode.Code,
+                ResponseSummary = gatewayResponseCode.Message,
+                Status = "Unsuccessful",
+                ProcessedAt = DateTime.Now
+            };
+
+            _logger.LogWarning("Payment request was not valid", unsuccessfulPayment);
+
+            return unsuccessfulPayment;
+        }
+
+        private async Task<Payment> ProcessValidPaymentRequest(ProcessPaymentRequest paymentRequest)
+        {
+            Payment processedPayment;
+            try
+            {
+                processedPayment = _acquiringBankService.ProcessPayment(paymentRequest);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Payment request could not been processed on the banking phase", paymentRequest);
+                throw;
+            }
+            try
+            {
+                _paymentContext.Payments.Add(processedPayment);
+                await _paymentContext.SaveChangesAsync();
+
+                _logger.LogInformation("Payment processed successfully", processedPayment);
+
+                return processedPayment;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Payment has been made but payment could not write to the database", paymentRequest);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Gets the specific payment with given processId
+        /// </summary>
+        /// <param name="processId"></param>
+        /// <returns></returns>
+        public async Task<Payment> GetPaymentAsync(string processId)
+        {
+            return await _paymentContext.Payments.
+                Where(p => p.ProcessId == Guid.Parse(processId))
+                .FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Validates process payment request by card, amount and currency
+        /// </summary>
+        /// <param name="processPaymentRequest"></param>
+        /// <returns></returns>
         public ResponseCode ValidatePaymentRequest(ProcessPaymentRequest processPaymentRequest)
         {
             if (_processPaymentRequestValidator.isValid(processPaymentRequest))
