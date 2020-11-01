@@ -20,7 +20,7 @@ services:
     restart: always
     build:
       context: .
-      dockerfile: Payment Gateway API/Dockerfile
+      dockerfile: PaymentGateway.API/Dockerfile
     environment:
       - ConnectionString=Server=paymentdb;Database=paymentgateway;Username=postgres;Password=djxsjwxK2w!yKT  
     networks:
