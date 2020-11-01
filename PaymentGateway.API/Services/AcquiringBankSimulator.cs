@@ -1,8 +1,8 @@
-﻿using PaymentGatewayAPI.Entities;
+﻿using PaymentGateway.API.Entities;
 using System;
 using System.Linq;
 
-namespace PaymentGatewayAPI.Services
+namespace PaymentGateway.API.Services
 {
     public class AcquiringBankSimulator : IAcquiringBankSimulator
     {

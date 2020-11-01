@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PaymentGatewayAPI.Entities;
+using PaymentGateway.API.Entities;
 
-namespace PaymentGatewayAPI.Data
+namespace PaymentGateway.API.Data
 {
     public class PaymentContext : DbContext
     {

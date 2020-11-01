@@ -5,12 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using PaymentGatewayAPI.Data;
-using PaymentGatewayAPI.Services;
-using PaymentGatewayAPI.Validators;
+using PaymentGateway.API.Data;
+using PaymentGateway.API.Services;
+using PaymentGateway.API.Validators;
 using System;
 
-namespace PaymentGatewayAPI
+namespace PaymentGateway.API
 {
     public class Startup
     {

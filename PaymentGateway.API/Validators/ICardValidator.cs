@@ -1,6 +1,6 @@
-﻿using PaymentGatewayAPI.Entities;
+﻿using PaymentGateway.API.Entities;
 
-namespace PaymentGatewayAPI.Validators
+namespace PaymentGateway.API.Validators
 {
     public interface ICardValidator
     {

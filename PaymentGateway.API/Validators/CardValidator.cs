@@ -1,10 +1,10 @@
 ﻿using CreditCardValidator;
 using Microsoft.Extensions.Logging;
-using PaymentGatewayAPI.Entities;
+using PaymentGateway.API.Entities;
 using System;
 using System.Text.RegularExpressions;
 
-namespace PaymentGatewayAPI.Validators
+namespace PaymentGateway.API.Validators
 {
     public class CardValidator : ICardValidator
     {

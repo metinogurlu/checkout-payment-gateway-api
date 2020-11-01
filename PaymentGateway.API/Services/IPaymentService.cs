@@ -1,7 +1,7 @@
-﻿using PaymentGatewayAPI.Entities;
+﻿using PaymentGateway.API.Entities;
 using System.Threading.Tasks;
 
-namespace PaymentGatewayAPI.Services
+namespace PaymentGateway.API.Services
 {
     public interface IPaymentService
     {

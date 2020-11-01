@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using PaymentGatewayAPI.Data;
-using PaymentGatewayAPI.Entities;
-using PaymentGatewayAPI.Services;
-using PaymentGatewayAPI.Validators;
+using PaymentGateway.API.Data;
+using PaymentGateway.API.Entities;
+using PaymentGateway.API.Services;
+using PaymentGateway.API.Validators;
 using System;
 using System.Threading.Tasks;
 
-namespace PaymentGatewayAPI
+namespace PaymentGateway.API
 {
     public class PaymentServie : IPaymentService
     {

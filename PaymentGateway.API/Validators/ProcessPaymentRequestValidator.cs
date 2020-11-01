@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using PaymentGatewayAPI.Entities;
+using PaymentGateway.API.Entities;
 
-namespace PaymentGatewayAPI.Validators
+namespace PaymentGateway.API.Validators
 {
     public class ProcessPaymentRequestValidator : IProcessPaymentRequestValidator
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PaymentGatewayAPI.Entities
+namespace PaymentGateway.API.Entities
 {
     public sealed class ResponseCode : IEquatable<ResponseCode>
     {

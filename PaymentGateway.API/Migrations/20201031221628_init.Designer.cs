@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using PaymentGatewayAPI.Data;
+using PaymentGateway.API.Data;
 
-namespace PaymentGatewayAPI.Migrations
+namespace PaymentGateway.API.Migrations
 {
     [DbContext(typeof(PaymentContext))]
     [Migration("20201031221628_init")]

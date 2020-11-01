@@ -1,4 +1,4 @@
-﻿namespace PaymentGatewayAPI.Entities
+﻿namespace PaymentGateway.API.Entities
 {
     public static class ResponseCodes
     {

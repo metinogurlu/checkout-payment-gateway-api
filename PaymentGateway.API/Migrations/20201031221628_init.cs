@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace PaymentGatewayAPI.Migrations
+namespace PaymentGateway.API.Migrations
 {
     public partial class init : Migration
     {

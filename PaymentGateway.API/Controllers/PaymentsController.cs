@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using PaymentGatewayAPI.Entities;
-using PaymentGatewayAPI.Services;
+using PaymentGateway.API.Entities;
+using PaymentGateway.API.Services;
 using Microsoft.Extensions.Logging;
 
-namespace PaymentGatewayAPI.Controllers
+namespace PaymentGateway.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]

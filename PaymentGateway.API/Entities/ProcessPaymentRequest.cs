@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PaymentGatewayAPI.Entities
+namespace PaymentGateway.API.Entities
 {
     public class ProcessPaymentRequest
     {

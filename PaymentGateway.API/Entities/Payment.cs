@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PaymentGatewayAPI.Entities
+namespace PaymentGateway.API.Entities
 {
     [Table("payments")]
     public class Payment
